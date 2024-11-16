@@ -5,14 +5,15 @@ const WeatherAndTrafficAlerts = () => {
   const [weather, setWeather] = useState(null);
   const [location, setLocation] = useState('Dallas, Texas');
   const [inputLocation, setInputLocation] = useState('');
+  const API_KEY = process.env.REACT_APP_OPEN_WEATHER_KEY;
 
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const weatherResponse = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=35aed3c0c31e316516ee854495c0f49d`
-        );
-        const weatherData = weatherResponse.data;
+       const weatherResponse = await axios.get(
+  `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${API_KEY}`
+);
+const weatherData = weatherResponse.data;
 
         setWeather({
           temperature: weatherData.main.temp,

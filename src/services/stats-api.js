@@ -1,8 +1,9 @@
 
+const API_URL = process.env.REACT_APP_BASE_URL;
 
 export const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/stats');
+      const response = await fetch(`${API_URL}/stats`);
   
       if (!response.ok) {
         throw new Error('Network response was not ok');

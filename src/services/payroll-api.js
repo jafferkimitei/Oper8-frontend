@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Set up the base URL for your API
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_BASE_URL;
 
 // Function to fetch payroll data
 export const fetchPayrollData = async (selectedUserId, selectedRole, startDate, endDate) => {

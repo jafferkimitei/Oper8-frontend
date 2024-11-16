@@ -9,13 +9,8 @@ import Balances from "./pages/Balances";
 import Tracking from "./pages/Tracking";
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from "./pages/Login";
-// import { auth } from './assets/firebase-config';
 
 const AppRouter = () => {
-  // const user = auth.currentUser;
-  // const authorizedUsers = ['admin@sarencoinc.com', 'munaa@sarencoinc.com', 'accounting@sarencoinc.com'];
-
-  // const isAuthorized = user && authorizedUsers.includes(user.email);
   return (
     <Router>
       <Routes>
