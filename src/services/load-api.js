@@ -13,7 +13,7 @@ export const getAllLoads = async () => {
   export const addLoad = async (loadData) => {
     try {
       const response = await axios.post(`${API_URL}/add`, loadData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { 'Content-Type': 'application/json' },
       });
       return response;
     } catch (error) {

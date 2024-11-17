@@ -52,20 +52,29 @@ const CreateNewLoad = ({ onSave }) => {
     if (!validateForm()) return;
 
     
-    const loadData = new FormData();
-    loadData.append('from_location', from_location);
-    loadData.append('to_location', to_location);
-    loadData.append('pickup_date', pickup_date);
-    loadData.append('rate', rate);
-    loadData.append('driverId', driverId);
-    loadData.append('dispatcherId', dispatcherId);
-
+    const loadData = {
+      from_location,
+      to_location,
+      pickup_date,
+      rate,
+      driverId,
+      dispatcherId,
+    };
     
+    console.log('Form data before submit:', {
+      from_location,
+      to_location,
+      pickup_date,
+      rate,
+      driverId,
+      dispatcherId,
+    });
+  
     setLoading(true);
     setMessage(''); 
 
     try {
-      const response = await addLoad(loadData);
+      const response = await addLoad(loadData); // sending JSON object instead of FormData
       if (response.status === 200) {
         setMessage('Load successfully added');
         setMessageType('success');

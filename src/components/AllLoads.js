@@ -30,46 +30,56 @@ const AllLoads = () => {
                 setUserRole('user');
             }
         }
-    const fetchData = async () => {
-      try {
-        const loadData = await getAllLoads();
-        const sortedLoads = loadData.sort((a, b) => new Date(b.pickup_date) - new Date(a.pickup_date)); // Sort by date in descending order
-        setLoads(sortedLoads);
-        console.log("Fetched loads:", loadData);
-
-        const driverIds = new Set(loadData.map((load) => load.driverId && typeof load.driverId === 'object' ? load.driverId._id : load.driverId));
-        const dispatcherIds = new Set(loadData.map((load) => load.dispatcherId && typeof load.dispatcherId === 'object' ? load.dispatcherId._id : load.dispatcherId));
-
-        const driversMap = new Map();
-        const dispatchersMap = new Map();
-        for (const driverId of driverIds) {
-          if (driverId) {
-            try {
-              const driver = await fetchDriverById(driverId);
-              driversMap.set(driver._id, driver);
-            } catch (error) {
-              console.error(`Error fetching driver with ID ${driverId}`, error);
+        const fetchData = async () => {
+          try {
+            const loadData = await getAllLoads();
+            const sortedLoads = loadData.sort((a, b) => new Date(b.pickup_date) - new Date(a.pickup_date)); // Sort by date in descending order
+            setLoads(sortedLoads);
+            console.log("Fetched loads:", loadData);
+        
+            const driverIds = new Set(loadData.map((load) => load.driverId && typeof load.driverId === 'object' ? load.driverId._id : load.driverId));
+            const dispatcherIds = new Set(loadData.map((load) => load.dispatcherId && typeof load.dispatcherId === 'object' ? load.dispatcherId._id : load.dispatcherId));
+        
+            const driversMap = new Map();
+            const dispatchersMap = new Map();
+        
+            for (const driverId of driverIds) {
+              if (driverId) {
+                try {
+                  const driver = await fetchDriverById(driverId);
+                  if (driver && driver._id) { // Check if driver is valid and has an _id
+                    driversMap.set(driver._id, driver);
+                  } else {
+                    console.warn(`Driver with ID ${driverId} not found or invalid`);
+                  }
+                } catch (error) {
+                  console.error(`Error fetching driver with ID ${driverId}`, error);
+                }
+              }
             }
-          }
-        }
-
-        for (const dispatcherId of dispatcherIds) {
-          if (dispatcherId) {  // Only attempt to fetch if dispatcherId is valid
-            try {
-              const dispatcher = await fetchDataWithRetry(fetchDispatcherById, dispatcherId);
-              dispatchersMap.set(dispatcher._id, dispatcher);
-            } catch (error) {
-              console.error(`Error fetching dispatcher with ID ${dispatcherId}`, error);
+        
+            for (const dispatcherId of dispatcherIds) {
+              if (dispatcherId) {
+                try {
+                  const dispatcher = await fetchDispatcherById(dispatcherId);
+                  if (dispatcher && dispatcher._id) { // Check if dispatcher is valid and has an _id
+                    dispatchersMap.set(dispatcher._id, dispatcher);
+                  } else {
+                    console.warn(`Dispatcher with ID ${dispatcherId} not found or invalid`);
+                  }
+                } catch (error) {
+                  console.error(`Error fetching dispatcher with ID ${dispatcherId}`, error);
+                }
+              }
             }
+        
+            setDrivers(driversMap);
+            setDispatchers(dispatchersMap);
+          } catch (error) {
+            console.error('Error fetching load data:', error);
           }
-        }
-
-        setDrivers(driversMap);
-        setDispatchers(dispatchersMap);
-      } catch (error) {
-        console.error('Error fetching loads:', error);
-      }
-    };
+        };
+        
 
     fetchData();
   }, []);

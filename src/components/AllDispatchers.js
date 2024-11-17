@@ -83,14 +83,14 @@ const AllDispatchers = () => {
                                         <td className="p-2">
                                             <button
                                                 className="text-light-text dark:text-dark-text hover:underline mr-2"
-                                                onClick={() => handleEdit(driver)}
+                                                onClick={() => handleEdit(dispatcher)}
                                                 aria-label="Edit"
                                             >
                                                 <FaEdit />
                                             </button>
                                             <button
                                                 className="text-red-500 hover:underline dark:text-red-400"
-                                                onClick={() => handleDelete(driver)}
+                                                onClick={() => handleDelete(dispatcher)}
                                                 aria-label="Delete"
                                             >
                                                 <FaTrash />
