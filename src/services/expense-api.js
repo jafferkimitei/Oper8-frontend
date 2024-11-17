@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL;
+const API_URL = 'https://oper8-backend.onrender.com/miscellaneous';
 
 export const addExpense = async (formData) => {
     try {
-      await axios.post(`${API_URL}/miscellaneous/add`, formData, {
+      await axios.post(`${API_URL}/add`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -17,7 +17,7 @@ export const addExpense = async (formData) => {
 
   export const fetchExpenses = async () => {
     try {
-      const response = await axios.get(`${API_URL}/miscellaneous`);
+      const response = await axios.get(`${API_URL}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching expenses', error);
@@ -27,7 +27,7 @@ export const addExpense = async (formData) => {
 
 export const deleteExpense = async (id) => {
     try {
-      await axios.delete(`${API_URL}/miscellaneous/${id}`);
+      await axios.delete(`${API_URL}/${id}`);
     } catch (error) {
       console.error('Error deleting expense', error);
       throw error;

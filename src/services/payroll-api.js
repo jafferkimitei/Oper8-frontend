@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Set up the base URL for your API
-const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
+const API_BASE_URL = 'https://oper8-backend.onrender.com/payrolls';
 
 // Function to fetch payroll data
 export const fetchPayrollData = async (selectedUserId, selectedRole, startDate, endDate) => {
@@ -13,7 +13,7 @@ export const fetchPayrollData = async (selectedUserId, selectedRole, startDate, 
         endDate: endDate,
       };
   
-      const response = await axios.get(`${API_BASE_URL}/payrolls/payroll`, { params });
+      const response = await axios.get(`${API_BASE_URL}/payroll`, { params });
       return response.data;
     } catch (error) {
       throw new Error('Error fetching payroll data');
@@ -24,7 +24,7 @@ export const fetchPayrollData = async (selectedUserId, selectedRole, startDate, 
 export const sendPayroll = async (selectedUserId, payrollData, startDate) => {
     try {
       const week = getWeekNumber(new Date(startDate));
-      await axios.post(`${API_BASE_URL}/payrolls/send`, {
+      await axios.post(`${API_BASE_URL}/send`, {
         userId: selectedUserId,
         payrollData: {
           ...payrollData,

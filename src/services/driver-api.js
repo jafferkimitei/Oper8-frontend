@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+const BASE_URL = 'https://oper8-backend.onrender.com/drivers';
 
 
 export const fetchDrivers = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/drivers/email-exists`);
+      const response = await axios.get(`${BASE_URL}/email-exists`);
       return response.data;
     } catch (error) {
       throw new Error('Error fetching drivers');
@@ -15,7 +15,7 @@ export const fetchDrivers = async () => {
 
 export const checkEmailById = async (email) => {
     try {
-      const response = await fetch(`${BASE_URL}/drivers/email-exists/${email}`);
+      const response = await fetch(`${BASE_URL}/email-exists/${email}`);
       const result = await response.json();
       return result.exists;
     } catch (error) {
@@ -28,7 +28,7 @@ export const checkEmailById = async (email) => {
 // Add a new driver
 export const addDriver = async (driverData) => {
     try {
-        const response = await axios.post(`${BASE_URL}/drivers/add`, driverData);
+        const response = await axios.post(`${BASE_URL}/add`, driverData);
         return response.data;
     } catch (error) {
         console.error('Error adding driver:', error);
@@ -39,7 +39,7 @@ export const addDriver = async (driverData) => {
 // Update an existing driver
 export const updateDriver = async (driverId, driverData) => {
     try {
-        const response = await axios.put(`${BASE_URL}/drivers/${driverId}`, driverData);
+        const response = await axios.put(`${BASE_URL}/${driverId}`, driverData);
         return response.data;
     } catch (error) {
         console.error('Error updating driver:', error);
@@ -50,7 +50,7 @@ export const updateDriver = async (driverId, driverData) => {
 // Function to delete a driver by ID
 export const deleteDriver = async (driverId) => {
     try {
-        await axios.delete(`${BASE_URL}/drivers/${driverId}`);
+        await axios.delete(`${BASE_URL}/${driverId}`);
     } catch (error) {
         throw new Error('Error deleting driver');
     }
@@ -59,7 +59,7 @@ export const deleteDriver = async (driverId) => {
 
 export const fetchDriverById = async (driverId) => {
     try {
-    const response = await axios.get(`${BASE_URL}/drivers/${driverId}`);
+    const response = await axios.get(`${BASE_URL}/${driverId}`);
     return response.data;
 } catch (error) {
     console.error('Error fetching driver:', error);
