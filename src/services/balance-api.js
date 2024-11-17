@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for API requests
-const API_URL = process.env.REACT_APP_BASE_URL;
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 // Function to fetch balance data by Load ID
 export const fetchBalanceByLoadId = async (loadId) => {
     try {
