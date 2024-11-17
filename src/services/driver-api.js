@@ -5,7 +5,7 @@ const BASE_URL = 'https://oper8-backend.onrender.com/drivers';
 
 export const fetchDrivers = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/email-exists`);
+      const response = await axios.get(`${BASE_URL}`);
       return response.data;
     } catch (error) {
       throw new Error('Error fetching drivers');
@@ -25,7 +25,6 @@ export const checkEmailById = async (email) => {
   };
   
 
-// Add a new driver
 export const addDriver = async (driverData) => {
     try {
         const response = await axios.post(`${BASE_URL}/add`, driverData);
@@ -36,7 +35,6 @@ export const addDriver = async (driverData) => {
     }
 };
 
-// Update an existing driver
 export const updateDriver = async (driverId, driverData) => {
     try {
         const response = await axios.put(`${BASE_URL}/${driverId}`, driverData);
@@ -47,7 +45,6 @@ export const updateDriver = async (driverId, driverData) => {
     }
 };
 
-// Function to delete a driver by ID
 export const deleteDriver = async (driverId) => {
     try {
         await axios.delete(`${BASE_URL}/${driverId}`);
