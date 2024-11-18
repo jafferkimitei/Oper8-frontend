@@ -154,7 +154,7 @@ const AllLoads = () => {
                   <td className="p-2 text-light-text dark:text-dark-text">{toSentenceCase(load.to_location)}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{load.pickup_date}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{load.miles}</td>
-                  <td className="p-2 text-light-text dark:text-dark-text">{load.rate_per_mile}</td>
+                  <td className="p-2 text-light-text dark:text-dark-text">{Number(load.rate_per_mile).toFixed(2)}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{Number(load.rate).toFixed(2)}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{toSentenceCase(load.broker)}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{driver ? toSentenceCase(driver.name) : 'N/A'}</td>
