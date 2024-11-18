@@ -8,6 +8,8 @@ const EditLoadModal = ({ loadData, onSave, onClose }) => {
   const [to_location, setToLocation] = useState(loadData?.to_location || '');
   const [pickup_date, setPickupDate] = useState(loadData?.pickup_date || '');
   const [rate, setRate] = useState(loadData?.rate || 0);
+  const [miles, setMiles] = useState(loadData?.miles || 0);
+  const [broker, setBroker] = useState(loadData?.broker || '');
   const [driverId, setDriverId] = useState(loadData?.driverId || '');
   const [dispatcherId, setDispatcherId] = useState(loadData?.dispatcherId || '');
   const [drivers, setDrivers] = useState([]);
@@ -53,6 +55,8 @@ const EditLoadModal = ({ loadData, onSave, onClose }) => {
     if (!to_location) formErrors.toLocation = 'To location is required';
     if (!pickup_date) formErrors.pickup_date = 'Pick up date is required';
     if (rate <= 0) formErrors.rate = 'Rate must be greater than 0';
+    if (miles <= 0) formErrors.miles = 'Miles must be greater than 0';
+    if (!broker) formErrors.broker = 'Broker is required';
     if (!driverId) formErrors.driverId = 'Driver is required';
     if (!dispatcherId) formErrors.dispatcherId = 'Dispatcher is required';
 
@@ -69,6 +73,8 @@ const EditLoadModal = ({ loadData, onSave, onClose }) => {
     updatedFormData.append('to_location', to_location);
     updatedFormData.append('pickup_date', pickup_date);
     updatedFormData.append('rate', rate);
+    updatedFormData.append('miles', miles);
+    updatedFormData.append('broker', broker);
     updatedFormData.append('driverId', driverId);
     updatedFormData.append('dispatcherId', dispatcherId);
 
@@ -151,6 +157,33 @@ const EditLoadModal = ({ loadData, onSave, onClose }) => {
                 className={`w-full p-3  bg-[#FEFCFB] dark:bg-[#374151] text-[#181C14] dark:text-white border ${errors.rate ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-[#0A1128]`}
               />
               {errors.rate && <p className="text-red-500 text-sm">{errors.rate}</p>}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-4">
+            <div className="flex-1 min-w-[250px]">
+              <label className="block text-sm font-medium text-[#034078] dark:text-[#FF9900] mb-2">Miles</label>
+              <input
+                type="number"
+                value={miles}
+                onChange={(e) => setMiles(Number(e.target.value))}
+                placeholder="Miles"
+                required
+                className={`w-full p-3 bg-[#FEFCFB] dark:bg-[#374151] text-[#181C14] dark:text-white border ${errors.miles ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-[#0A1128]`}
+              />
+              {errors.miles && <p className="text-red-500 text-sm">{errors.miles}</p>}
+            </div>
+            <div className="flex-1 min-w-[250px]">
+              <label className="block text-sm font-medium text-[#034078] dark:text-[#FF9900] mb-2">Broker</label>
+              <input
+                type="text"
+                value={broker}
+                onChange={(e) => setBroker(e.target.value)}
+                placeholder="Broker"
+                required
+                className={`w-full p-3  bg-[#FEFCFB] dark:bg-[#374151] text-[#181C14] dark:text-white border ${errors.broker ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-[#0A1128]`}
+              />
+              {errors.broker && <p className="text-red-500 text-sm">{errors.broker}</p>}
             </div>
           </div>
 

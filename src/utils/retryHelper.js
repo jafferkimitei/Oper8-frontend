@@ -1,9 +1,10 @@
-import axios from 'axios';
+
+import axiosInstance from './axiosInstance';
 
 export async function fetchDataWithRetry(url, retries = 3, delay = 1000) {
     for (let i = 0; i < retries; i++) {
         try {
-            const response = await axios.get(url);
+            const response = await axiosInstance.get(url);
             return response.data;
         } catch (error) {
             if (error.response && error.response.status === 429 && i < retries - 1) {

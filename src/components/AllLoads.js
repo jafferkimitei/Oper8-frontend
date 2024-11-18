@@ -5,7 +5,7 @@ import EditLoadModal from './EditLoadModal';
 import { getAllLoads, deleteLoadById } from '../services/load-api';
 import { fetchDriverById } from '../services/driver-api';
 import { fetchDispatcherById } from '../services/dispatcher-api';
-import { fetchDataWithRetry } from '../utils/retryHelper';
+import axiosInstance from '../utils/axiosInstance';
 import { toSentenceCase } from '../utils/textUtils';
 import { auth } from '../assets/firebase-config';
 
@@ -47,7 +47,7 @@ const AllLoads = () => {
               if (driverId) {
                 try {
                   const driver = await fetchDriverById(driverId);
-                  if (driver && driver._id) { // Check if driver is valid and has an _id
+                  if (driver && driver._id) { 
                     driversMap.set(driver._id, driver);
                   } else {
                     console.warn(`Driver with ID ${driverId} not found or invalid`);
@@ -62,7 +62,7 @@ const AllLoads = () => {
               if (dispatcherId) {
                 try {
                   const dispatcher = await fetchDispatcherById(dispatcherId);
-                  if (dispatcher && dispatcher._id) { // Check if dispatcher is valid and has an _id
+                  if (dispatcher && dispatcher._id) { 
                     dispatchersMap.set(dispatcher._id, dispatcher);
                   } else {
                     console.warn(`Dispatcher with ID ${dispatcherId} not found or invalid`);
@@ -84,21 +84,22 @@ const AllLoads = () => {
     fetchData();
   }, []);
 
+
+  const handleDelete = async () => {
+    try {
+      await deleteLoadById(selectedLoad._id);
+      setLoads(loads.filter(load => load._id !== selectedLoad._id));
+      setIsDeleteModalOpen(false);
+      alert('Load deleted successfully!');
+    } catch (error) {
+      console.error('Failed to delete the load:', error);
+      alert('Failed to delete the load. Please try again.');
+    }
+  };
+
   const handleDeleteClick = (load) => {
     setSelectedLoad(load);
     setIsDeleteModalOpen(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (selectedLoad) {
-      try {
-        await deleteLoadById(selectedLoad._id);
-        setLoads(loads.filter((load) => load._id !== selectedLoad._id));
-        setIsDeleteModalOpen(false);
-      } catch (error) {
-        console.error('Error deleting load:', error);
-      }
-    }
   };
 
   const handleEditClick = (load) => {
@@ -114,7 +115,6 @@ const AllLoads = () => {
 
   return (
     <div className="mt-6">
-      {/* Wrapper to make the table horizontally scrollable on smaller screens */}
       <div className="overflow-x-auto min-w-full">
         <table className="min-w-full bg-light-background border dark:bg-dark-background border-border dark:border-dark-border shadow-lg text-xs md:text-sm">
           <thead>
@@ -123,12 +123,14 @@ const AllLoads = () => {
               <th className="p-2 text-left text-light-text dark:text-dark-text">From</th>
               <th className="p-2 text-left text-light-text dark:text-dark-text">To</th>
               <th className="p-2 text-left text-light-text dark:text-dark-text">PU Date</th>
+              <th className="p-2 text-left text-light-text dark:text-dark-text">Miles</th>
+              <th className="p-2 text-left text-light-text dark:text-dark-text">Rate/mile</th>
               <th className="p-2 text-left text-light-text dark:text-dark-text">Rate</th>
+              <th className="p-2 text-left text-light-text dark:text-dark-text">Broker</th>
               <th className="p-2 text-left text-light-text dark:text-dark-text">Driver</th>
               <th className="p-2 text-left text-light-text dark:text-dark-text">Dispatcher</th>
               <th className="p-2 text-left text-light-text dark:text-dark-text hidden md:table-cell">Driver Earnings</th>
               <th className="p-2 text-left text-light-text dark:text-dark-text hidden md:table-cell">Dispatcher Earnings</th>
-              {/* Conditionally render Actions column header based on user role */}
               {userRole === 'admin' && (
                                 <th className="p-2 text-left text-light-text dark:text-dark-text">Actions</th>
                             )}
@@ -151,11 +153,14 @@ const AllLoads = () => {
                   <td className="p-2 text-light-text dark:text-dark-text">{toSentenceCase(load.from_location)}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{toSentenceCase(load.to_location)}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{load.pickup_date}</td>
-                  <td className="p-2 text-light-text dark:text-dark-text">{load.rate}</td>
+                  <td className="p-2 text-light-text dark:text-dark-text">{load.miles}</td>
+                  <td className="p-2 text-light-text dark:text-dark-text">{load.rate_per_mile}</td>
+                  <td className="p-2 text-light-text dark:text-dark-text">{Number(load.rate).toFixed(2)}</td>
+                  <td className="p-2 text-light-text dark:text-dark-text">{toSentenceCase(load.broker)}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{driver ? toSentenceCase(driver.name) : 'N/A'}</td>
                   <td className="p-2 text-light-text dark:text-dark-text">{dispatcher ? toSentenceCase(dispatcher.name) : 'N/A'}</td>
-                  <td className="p-2 text-light-text dark:text-dark-text hidden md:table-cell">{load.driverEarnings}</td>
-                  <td className="p-2 text-light-text dark:text-dark-text hidden md:table-cell">{load.dispatcherEarnings}</td>
+                  <td className="p-2 text-light-text dark:text-dark-text hidden md:table-cell">{Number(load.driverEarnings).toFixed(2)}</td>
+                  <td className="p-2 text-light-text dark:text-dark-text hidden md:table-cell">{Number(load.dispatcherEarnings).toFixed(2)}</td>
                   {userRole === 'admin' && (
                                         <>
                   <td className="p-2 flex space-x-1 md:space-x-2">
@@ -200,8 +205,9 @@ const AllLoads = () => {
       {isDeleteModalOpen && selectedLoad && (
         <DeleteLoadModal
           isOpen={isDeleteModalOpen}
+          loadData={selectedLoad}
           onClose={() => setIsDeleteModalOpen(false)}
-          onConfirm={handleDeleteConfirm}
+          onDelete={handleDelete}
         />
       )}
     </div>
