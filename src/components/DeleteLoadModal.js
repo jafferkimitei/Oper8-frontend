@@ -10,7 +10,7 @@ const DeleteLoadModal = ({ isOpen, load, onClose, onDelete }) => {
         <h2 className="text-xl mb-4 text-red-500">Are you sure you want to delete this load?</h2>
         
         <div className="mb-4">
-          <p><strong>Load ID:</strong> {load.load_id}</p>
+          <p><strong>Load ID:</strong> {load.load._id}</p>
           <p><strong>From:</strong> {load.from_location}</p>
           <p><strong>To:</strong> {load.to_location}</p>
         </div>
