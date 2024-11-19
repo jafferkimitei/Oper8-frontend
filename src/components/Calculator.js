@@ -1,36 +1,36 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 const Calculator = ({ closeCalculator }) => {
-  const [fromLocation, setFromLocation] = useState('');
-  const [toLocation, setToLocation] = useState('');
+//   const [fromLocation, setFromLocation] = useState('');
+//   const [toLocation, setToLocation] = useState('');
   const [miles, setMiles] = useState(null);
   const [ratePerMile, setRatePerMile] = useState('');
   const [totalRate, setTotalRate] = useState('');
-  const [error, setError] = useState('');
+//   const [error, setError] = useState('');
 
-  const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+//   const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-  // Function to fetch miles between two locations
-  const getMiles = async () => {
-    if (!fromLocation || !toLocation) {
-      setError('Please enter both locations.');
-      return;
-    }
+//   // Function to fetch miles between two locations
+//   const getMiles = async () => {
+//     if (!fromLocation || !toLocation) {
+//       setError('Please enter both locations.');
+//       return;
+//     }
 
-    try {
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${fromLocation}&destinations=${toLocation}&key=${GOOGLE_MAPS_API_KEY}`
-      );
-      console.log(response.data);
-      const distance = response.data.rows[0].elements[0].distance.text;
-      setMiles(distance);
-      setError('');
-    } catch (err) {
-      setError('Error fetching distance. Please try again.');
-      console.error(err);
-    }
-  };
+//     try {
+//       const response = await axios.get(
+//         `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${fromLocation}&destinations=${toLocation}&key=${GOOGLE_MAPS_API_KEY}`
+//       );
+//       console.log(response.data);
+//       const distance = response.data.rows[0].elements[0].distance.text;
+//       setMiles(distance);
+//       setError('');
+//     } catch (err) {
+//       setError('Error fetching distance. Please try again.');
+//       console.error(err);
+//     }
+//   };
 
   const handleRatePerMileChange = (e) => {
     setRatePerMile(e.target.value);
@@ -67,7 +67,7 @@ const Calculator = ({ closeCalculator }) => {
         Load Calculator
       </h2>
 
-      {/* Location Inputs */}
+      {/* Location Inputs
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:mb-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-[#FF9900]">
@@ -94,14 +94,14 @@ const Calculator = ({ closeCalculator }) => {
             className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-[#FEFCFB] text-[#181C14] dark:bg-[#374151] dark:text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-      </div>
+      </div> */}
 
-      <button
+      {/* <button
         onClick={getMiles}
         className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 sm:mb-6"
       >
         Get Distance
-      </button>
+      </button> */}
 
       {/* Display Distance */}
       {miles && (
@@ -110,7 +110,7 @@ const Calculator = ({ closeCalculator }) => {
         </div>
       )}
 
-      {error && <p className="mt-2 text-red-500">{error}</p>}
+      {/* {error && <p className="mt-2 text-red-500">{error}</p>} */}
 
       {/* Rate and Miles Inputs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:mb-6">
