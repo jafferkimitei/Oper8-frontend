@@ -22,6 +22,7 @@ const Calculator = ({ closeCalculator }) => {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${fromLocation}&destinations=${toLocation}&key=${GOOGLE_MAPS_API_KEY}`
       );
+      console.log(response.data);
       const distance = response.data.rows[0].elements[0].distance.text;
       setMiles(distance);
       setError('');
