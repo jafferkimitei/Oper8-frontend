@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { FaCalculator } from 'react-icons/fa';
 import { addLoad } from '../services/load-api';
 import { fetchDispatchers } from '../services/dispatcher-api';
 import { fetchDrivers } from '../services/driver-api';
+import Calculator from './Calculator';
 
 const CreateNewLoad = ({ onSave }) => {
   const [from_location, setFromLocation] = useState('');
@@ -18,6 +20,7 @@ const CreateNewLoad = ({ onSave }) => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   useEffect(() => {
     const getDriversAndDispatchers = async () => {
@@ -106,6 +109,9 @@ const CreateNewLoad = ({ onSave }) => {
     } finally {
       setLoading(false);
     }
+  };
+  const toggleCalculator = () => {
+    setIsCalculatorOpen(prev => !prev);
   };
 
   return (
@@ -241,6 +247,18 @@ const CreateNewLoad = ({ onSave }) => {
           {loading ? 'Loading...' : 'Submit'}
         </button>
       </div>
+      {/* Calculator Modal */}
+      {isCalculatorOpen && (
+          <div
+            className="fixed inset-0 flex justify-center items-center bg-[#0A1128] bg-opacity-50 z-50"
+          >
+            <Calculator closeCalculator={toggleCalculator} />
+          </div>
+        )}
+
+        <button onClick={toggleCalculator} className="fixed bottom-4 right-4 p-3 bg-blue-500 text-white rounded-full shadow-lg">
+          <FaCalculator />
+        </button>
     </div>
   </form>
 );

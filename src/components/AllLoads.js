@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'; 
-import { FaTrashAlt, FaPen } from 'react-icons/fa';
+import { FaTrashAlt, FaPen, FaCalculator } from 'react-icons/fa';
 import DeleteLoadModal from './DeleteLoadModal';
 import EditLoadModal from './EditLoadModal';
+import Calculator from './Calculator';
 import { getAllLoads, deleteLoadById } from '../services/load-api';
 import { fetchDriverById } from '../services/driver-api';
 import { fetchDispatcherById } from '../services/dispatcher-api';
@@ -16,9 +17,10 @@ const AllLoads = () => {
   const [selectedLoad, setSelectedLoad] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [userRole, setUserRole] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const LOADS_PER_PAGE = 10;
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -84,6 +86,16 @@ const AllLoads = () => {
     fetchData();
   }, []);
 
+  const startIndex = (currentPage - 1) * LOADS_PER_PAGE;
+  const currentLoads = loads.slice(startIndex, startIndex + LOADS_PER_PAGE);
+  const totalPages = Math.ceil(loads.length / LOADS_PER_PAGE);
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
 
   const handleDelete = async () => {
     try {
@@ -107,11 +119,11 @@ const AllLoads = () => {
     setIsEditModalOpen(true);
   };
 
-  const handlePageChange = (newPage) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      setCurrentPage(newPage); 
-    }
+  const toggleCalculator = () => {
+    setIsCalculatorOpen(prev => !prev);
   };
+
+
 
   return (
     <div className="mt-6">
@@ -137,8 +149,9 @@ const AllLoads = () => {
             </tr>
           </thead>
           <tbody>
-            {loads.map((load, index) => {
-              const rowIndex = (currentPage - 1) * 10 + index + 1;
+            {currentLoads.map((load, index) => {
+              const rowIndex = (currentPage - 1) * LOADS_PER_PAGE + index + 1;
+
               const driver = typeof load.driverId === 'string'
                 ? drivers.get(load.driverId)
                 : load.driverId;
@@ -188,7 +201,52 @@ const AllLoads = () => {
         </table>
       </div>
 
+{/* Pagination Controls */}
+<div className="flex justify-center items-center mt-6 space-x-2">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`px-4 py-2 rounded ${
+              currentPage === index + 1
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
       
+      {/* Calculator Modal */}
+      {isCalculatorOpen && (
+          <div
+            className="fixed inset-0 flex justify-center items-center bg-[#0A1128] bg-opacity-50 z-50"
+          >
+            <Calculator closeCalculator={toggleCalculator} />
+          </div>
+        )}
+
+        {/* Floating Calculator Button */}
+        <button onClick={toggleCalculator} className="fixed bottom-4 right-4 p-3 bg-blue-500 text-white rounded-full shadow-lg">
+          <FaCalculator />
+        </button>
+
+
 
       {isEditModalOpen && selectedLoad && (
         <EditLoadModal
