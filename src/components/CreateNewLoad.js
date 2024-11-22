@@ -215,7 +215,7 @@ const CreateNewLoad = ({ onSave }) => {
           >
             <option value="">Select Driver</option>
             {drivers.map((driver) => (
-              <option key={driver.id} value={driver.id}>{driver.name}</option>
+              <option key={driver._id} value={driver._id}>{driver.name}</option>
             ))}
           </select>
           {errors.driverId && <p className="text-red-500 text-sm">{errors.driverId}</p>}
@@ -231,7 +231,7 @@ const CreateNewLoad = ({ onSave }) => {
           >
             <option value="">Select Dispatcher</option>
             {dispatchers.map((dispatcher) => (
-              <option key={dispatcher.id} value={dispatcher.id}>{dispatcher.name}</option>
+              <option key={dispatcher._id} value={dispatcher._id}>{dispatcher.name}</option>
             ))}
           </select>
           {errors.dispatcherId && <p className="text-red-500 text-sm">{errors.dispatcherId}</p>}
